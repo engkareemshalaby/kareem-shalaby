@@ -1,0 +1,1 @@
+<x-layouts.admin title="مشروع جديد"><h1 class="mb-8 text-3xl font-bold">إضافة مشروع</h1><form method="POST" enctype="multipart/form-data" action="{{ route('admin.projects.store') }}">@csrf @include('admin.projects.form')<button class="btn-primary mt-6">حفظ المشروع</button></form></x-layouts.admin>

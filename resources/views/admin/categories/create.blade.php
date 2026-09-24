@@ -1,0 +1,1 @@
+<x-layouts.admin title="قسم جديد"><h1 class="mb-7 text-3xl font-bold">قسم جديد</h1><form method="POST" action="{{ route('admin.categories.store') }}">@csrf @include('admin.categories.form')<button class="btn-primary mt-6">حفظ القسم</button></form></x-layouts.admin>

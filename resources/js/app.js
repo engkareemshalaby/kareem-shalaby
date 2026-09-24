@@ -1,0 +1,2 @@
+document.querySelectorAll('[data-menu-toggle]').forEach((button)=>{button.addEventListener('click',()=>document.querySelector('[data-mobile-menu]')?.classList.toggle('hidden'))});
+document.querySelectorAll('[data-theme-toggle]').forEach((button)=>{button.addEventListener('click',()=>{document.documentElement.classList.toggle('dark');localStorage.setItem('theme',document.documentElement.classList.contains('dark')?'dark':'light')})});

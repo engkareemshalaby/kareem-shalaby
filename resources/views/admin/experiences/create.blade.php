@@ -1,0 +1,1 @@
+<x-layouts.admin title="خبرة جديدة"><h1 class="mb-7 text-3xl font-bold">خبرة جديدة</h1><form method="POST" action="{{ route('admin.experiences.store') }}">@csrf @include('admin.experiences.form')<button class="btn-primary mt-6">حفظ الخبرة</button></form></x-layouts.admin>

@@ -1,0 +1,1 @@
+<x-layouts.admin title="رابط تواصل جديد"><h1 class="mb-8 text-3xl font-bold">إضافة وسيلة تواصل</h1><form method="POST" action="{{ route('admin.social-links.store') }}">@csrf @include('admin.social-links.form')<button class="btn-primary mt-6">حفظ الرابط</button></form></x-layouts.admin>
