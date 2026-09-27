@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class ArticleController extends Controller
@@ -40,7 +41,7 @@ class ArticleController extends Controller
     {
         $validated = $request->validated();
         $article = Article::create($this->payload($validated, $request));
-        $article->tags()->sync($validated['tags'] ?? []);
+        $article->tags()->sync($this->tagIds($validated));
 
         return redirect()->route('admin.articles.edit', $article)->with('success', 'تم حفظ المقال بنجاح.');
     }
@@ -71,8 +72,13 @@ class ArticleController extends Controller
     public function update(UpdateArticleRequest $request, Article $article): RedirectResponse
     {
         $validated = $request->validated();
+
+        if ($request->hasFile('cover_image') && $article->cover_image) {
+            Storage::disk('public')->delete($article->cover_image);
+        }
+
         $article->update($this->payload($validated, $request));
-        $article->tags()->sync($validated['tags'] ?? []);
+        $article->tags()->sync($this->tagIds($validated));
 
         return back()->with('success', 'تم تحديث المقال.');
     }
@@ -82,6 +88,10 @@ class ArticleController extends Controller
      */
     public function destroy(Article $article): RedirectResponse
     {
+        if ($article->cover_image) {
+            Storage::disk('public')->delete($article->cover_image);
+        }
+
         $article->delete();
 
         return redirect()->route('admin.articles.index')->with('success', 'تم حذف المقال.');
@@ -90,11 +100,30 @@ class ArticleController extends Controller
     /** @param array<string, mixed> $validated */
     private function payload(array $validated, Request $request): array
     {
-        unset($validated['tags']);
+        unset($validated['tags'], $validated['new_tag_name'], $validated['new_tag_slug'], $validated['cover_image']);
         $validated['is_featured'] = $request->boolean('is_featured');
         $validated['published_at'] = $validated['status'] === 'published' ? ($validated['published_at'] ?? now()) : null;
         $validated['seo_keywords'] = collect(explode(',', $validated['seo_keywords'] ?? ''))->map(fn (string $keyword) => trim($keyword))->filter()->values()->all();
 
+        if ($request->hasFile('cover_image')) {
+            $validated['cover_image'] = $request->file('cover_image')->store('articles/covers', 'public');
+        }
+
         return $validated;
+    }
+
+    /** @param array<string, mixed> $validated */
+    private function tagIds(array $validated): array
+    {
+        $tagIds = $validated['tags'] ?? [];
+
+        if (! empty($validated['new_tag_name']) && ! empty($validated['new_tag_slug'])) {
+            $tagIds[] = Tag::create([
+                'name' => $validated['new_tag_name'],
+                'slug' => $validated['new_tag_slug'],
+            ])->getKey();
+        }
+
+        return array_values(array_unique($tagIds));
     }
 }
