@@ -7,6 +7,7 @@ use App\Http\Requests\Admin\StoreTagRequest;
 use App\Http\Requests\Admin\UpdateTagRequest;
 use App\Models\Tag;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class TagController extends Controller
@@ -32,9 +33,13 @@ class TagController extends Controller
      */
     public function store(StoreTagRequest $request): RedirectResponse
     {
-        Tag::create($request->validated());
+        $tags = $request->validated()['tags'];
 
-        return redirect()->route('admin.tags.index')->with('success', 'تمت إضافة الوسم.');
+        DB::transaction(function () use ($tags): void {
+            collect($tags)->each(fn (array $tag) => Tag::create($tag));
+        });
+
+        return redirect()->route('admin.tags.index')->with('success', 'تمت إضافة '.count($tags).' وسم بنجاح.');
     }
 
     /**
