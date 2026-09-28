@@ -7,6 +7,7 @@
         ['label' => 'المشاريع', 'route' => 'admin.projects.index', 'pattern' => 'admin.projects.*', 'icon' => '◇'],
         ['label' => 'الخبرات', 'route' => 'admin.experiences.index', 'pattern' => 'admin.experiences.*', 'icon' => '◷'],
         ['label' => 'وسائل التواصل', 'route' => 'admin.social-links.index', 'pattern' => 'admin.social-links.*', 'icon' => '↗'],
+        ['label' => 'رسائل التواصل', 'route' => 'admin.contact-messages.index', 'pattern' => 'admin.contact-messages.*', 'icon' => '✉', 'badge' => $unreadContactMessages],
         ['label' => 'الملف والتواصل', 'route' => 'admin.profile.edit', 'pattern' => 'admin.profile.*', 'icon' => '●'],
     ];
 @endphp
@@ -25,7 +26,7 @@
     <aside data-admin-sidebar class="fixed inset-y-0 right-0 z-50 flex w-72 translate-x-full flex-col overflow-y-auto bg-[#111827] px-5 py-6 text-white shadow-2xl transition-transform duration-300 lg:translate-x-0">
         <div class="flex items-center justify-between gap-4 px-2">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center gap-3">
-                <span class="grid size-11 place-items-center rounded-2xl bg-accent font-display text-lg font-bold text-white">KS</span>
+                <span class="grid size-12 place-items-center overflow-hidden rounded-2xl bg-[#08101d] p-1"><img class="h-full w-full object-contain" src="{{ asset('ks.png') }}" alt="KS"></span>
                 <span><strong class="block font-display text-base">لوحة الإدارة</strong><small class="mt-0.5 block text-white/45">Kareem Shalaby</small></span>
             </a>
             <button data-admin-menu-close type="button" class="grid size-9 place-items-center rounded-xl bg-white/10 text-xl lg:hidden" aria-label="إغلاق القائمة">×</button>
@@ -41,6 +42,7 @@
                 <a class="group flex items-center gap-3 rounded-2xl px-3 py-3 transition {{ request()->routeIs($item['pattern']) ? 'bg-accent text-white shadow-lg shadow-black/15' : 'text-white/65 hover:bg-white/8 hover:text-white' }}" href="{{ route($item['route']) }}">
                     <span class="grid size-9 place-items-center rounded-xl {{ request()->routeIs($item['pattern']) ? 'bg-white/15' : 'bg-white/6 group-hover:bg-white/10' }}">{{ $item['icon'] }}</span>
                     <span>{{ $item['label'] }}</span>
+                    @if(($item['badge'] ?? 0) > 0)<span class="me-auto rounded-full bg-red-400 px-2 py-0.5 text-xs text-white">{{ $item['badge'] }}</span>@endif
                 </a>
             @endforeach
         </nav>

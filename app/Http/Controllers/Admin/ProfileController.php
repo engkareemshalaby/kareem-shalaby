@@ -19,6 +19,7 @@ class ProfileController extends Controller
     {
         $validated = $request->validate([
             'phone' => ['required', 'string', 'max:30'],
+            'phone_secondary' => ['nullable', 'string', 'max:30'],
             'email' => ['required', 'email', 'max:150'],
             'linkedin_url' => ['nullable', 'url', 'max:255'],
             'location' => ['nullable', 'string', 'max:150'],

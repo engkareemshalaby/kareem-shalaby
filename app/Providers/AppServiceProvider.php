@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Models\Article;
 use App\Models\Category;
+use App\Models\ContactMessage;
 use App\Models\SiteSetting;
 use App\Models\SocialLink;
 use Illuminate\Database\Eloquent\Model;
@@ -41,6 +42,10 @@ class AppServiceProvider extends ServiceProvider
                 'contactSettings' => Schema::hasTable('site_settings') ? SiteSetting::query()->pluck('value', 'key') : collect(),
                 'socialLinks' => Schema::hasTable('social_links') ? SocialLink::visible()->get() : collect(),
             ]);
+        });
+
+        View::composer('layouts.admin', function ($view): void {
+            $view->with('unreadContactMessages', Schema::hasTable('contact_messages') ? ContactMessage::whereNull('read_at')->count() : 0);
         });
     }
 }

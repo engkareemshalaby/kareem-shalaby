@@ -18,7 +18,12 @@ class PublicSiteTest extends TestCase
 
         $response = $this->get('/ar');
 
-        $response->assertOk()->assertSee('مقال منشور')->assertDontSee('مسودة خاصة');
+        $response
+            ->assertOk()
+            ->assertSee('مقال منشور')
+            ->assertDontSee('مسودة خاصة')
+            ->assertDontSee('data-theme-toggle', false)
+            ->assertDontSee("localStorage.getItem('theme')", false);
     }
 
     public function test_published_article_renders_metadata_and_escaped_markdown(): void
