@@ -92,6 +92,25 @@ class ArticleManagementTest extends TestCase
         Storage::disk('public')->assertExists($article->fresh()->cover_image);
     }
 
+    public function test_each_article_editor_uses_its_own_autosave_storage_keys(): void
+    {
+        $admin = User::factory()->create(['is_admin' => true]);
+        $firstArticle = Article::factory()->create();
+        $secondArticle = Article::factory()->create();
+
+        $firstResponse = $this->actingAs($admin)->get(route('admin.articles.edit', $firstArticle));
+        $secondResponse = $this->actingAs($admin)->get(route('admin.articles.edit', $secondArticle));
+
+        $firstResponse
+            ->assertSee('data-autosave-id="article-'.$firstArticle->getKey().'-body-ar"', false)
+            ->assertSee('data-autosave-id="article-'.$firstArticle->getKey().'-body-en"', false)
+            ->assertDontSee('data-autosave-id="article-'.$secondArticle->getKey().'-body-ar"', false);
+        $secondResponse
+            ->assertSee('data-autosave-id="article-'.$secondArticle->getKey().'-body-ar"', false)
+            ->assertSee('data-autosave-id="article-'.$secondArticle->getKey().'-body-en"', false)
+            ->assertDontSee('data-autosave-id="article-'.$firstArticle->getKey().'-body-ar"', false);
+    }
+
     public function test_article_upload_rejects_non_image_file(): void
     {
         Storage::fake('public');
