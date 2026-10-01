@@ -20,3 +20,25 @@
   .prose-kareem h2{@apply mt-10 mb-4 text-2xl font-bold text-ink}.prose-kareem h3{@apply mt-8 mb-3 text-xl font-bold text-ink}.prose-kareem p{@apply my-5}.prose-kareem ul{@apply my-5 list-disc pe-6}.prose-kareem ol{@apply my-5 list-decimal pe-6}.prose-kareem blockquote{@apply my-8 border-e-4 border-brand bg-brand/5 px-6 py-3 italic}.prose-kareem code{@apply rounded bg-ink px-1.5 py-0.5 font-mono text-sm text-white}.prose-kareem pre{@apply my-6 overflow-x-auto rounded-2xl bg-ink p-5 text-left text-white}.prose-kareem pre code{@apply p-0}.prose-kareem a{@apply font-bold text-brand underline decoration-brand/30 underline-offset-4}
 }
 .grain{background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E")}
+
+@layer components {
+  .article-content{@apply min-w-0 text-base leading-8 sm:text-lg sm:leading-9;overflow-wrap:anywhere}
+  .article-content>:first-child{@apply mt-0}
+  .article-content>:last-child{@apply mb-0}
+  .article-content h1{@apply mt-10 mb-5 text-3xl leading-relaxed font-bold text-ink}
+  .article-content h2{@apply mt-10 mb-5 text-xl leading-relaxed sm:text-2xl}
+  .article-content h3{@apply leading-relaxed}
+  .article-content ul,.article-content ol{@apply ps-6 pe-0}
+  .article-content li{@apply my-2}
+  .article-content blockquote{@apply border-s-4 border-e-0 border-accent bg-accent/5 px-5 py-2 not-italic}
+  .article-content blockquote p{@apply my-3}
+  .article-content pre{@apply max-w-full bg-brand text-sm leading-7;direction:ltr;overflow-wrap:normal}
+  .article-content pre code{@apply bg-transparent text-inherit}
+  .article-content :not(pre)>code{@apply bg-brand/5 text-brand;box-decoration-break:clone}
+  .article-content img{@apply my-8 h-auto max-w-full rounded-xl}
+  .article-content table{@apply my-8 block max-w-full overflow-x-auto text-start text-sm}
+  .article-content th,.article-content td{@apply border border-line px-4 py-3 text-start}
+  .article-content th{@apply bg-paper font-bold}
+  .article-content hr{@apply my-10 border-line}
+  .article-content a{@apply text-accent decoration-accent/40 transition hover:decoration-accent}
+}
