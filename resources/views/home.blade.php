@@ -1,12 +1,84 @@
 @php($isEnglish = app()->isLocale('en'))
 <x-layouts.app>
-@push('head')<script type="application/ld+json">{!! json_encode(['@@context'=>'https://schema.org','@@type'=>'Person','name'=>'Kareem Shalaby','alternateName'=>'كريم شلبي','jobTitle'=>'Software Engineer','url'=>url('/')], JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES) !!}</script>@endpush
-<section class="container-site grid min-h-[76vh] items-center gap-14 py-16 lg:grid-cols-[1.15fr_.85fr] lg:py-24">
-<div><span class="eyebrow">Software Engineer · Entrepreneur · Writer</span><h1 class="mt-6 max-w-4xl text-5xl leading-[1.18] font-bold tracking-tight sm:text-7xl">{!! $isEnglish ? 'I build useful things,<br><span class="text-accent">then share what I learn.</span>' : 'أبني أشياء نافعة،<br><span class="text-accent">ثم أشارك ما أتعلمه.</span>' !!}</h1><p class="mt-7 max-w-2xl text-xl leading-9 text-muted">{{ $isEnglish ? 'I’m Kareem Shalaby. I write about software, business, science, and lessons from real experience — clearly and honestly.' : 'أنا كريم شلبي. أكتب عن البرمجة والأعمال والخبرات الحقيقية، وأحوّل ما أتعلمه إلى معرفة واضحة يمكن البناء عليها.' }}</p><div class="mt-9 flex flex-wrap gap-3"><a class="btn-primary" href="{{ route('articles.index') }}">{{ $isEnglish ? 'Explore articles →' : 'استكشف المقالات ←' }}</a><a class="btn-secondary" href="{{ route('contact.create') }}">{{ $isEnglish ? 'Let’s work together' : 'دعنا نعمل معًا' }}</a></div></div>
-<div class="relative"><div class="absolute -inset-6 -z-10 rotate-3 rounded-[3rem] bg-accent/15 blur-sm"></div><div class="overflow-hidden rounded-[2.5rem] border border-white/10 bg-[#0b1424] p-9 text-white shadow-2xl shadow-brand/20"><div class="flex items-start justify-between gap-5"><img class="h-28 w-auto" src="{{ asset('ks.png') }}" alt="Kareem Shalaby"><span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/55">CAIRO · EGYPT</span></div><p class="mt-14 font-display text-3xl leading-relaxed">“المعرفة تصبح أثمن حين تتحول إلى شيء يمكن للآخرين البناء عليه.”</p><div class="mt-10 flex items-center justify-between border-t border-white/10 pt-5 text-sm text-white/45"><span>Software · Business · Life</span><span class="text-accent">KS / 2026</span></div></div></div>
-</section>
-<section class="container-site py-16"><div class="mb-10 flex items-end justify-between"><div><p class="font-bold text-accent">{{ $isEnglish ? 'Knowledge paths' : 'مسارات المعرفة' }}</p><h2 class="mt-2 text-3xl font-bold">{{ $isEnglish ? 'Six fields I write about' : 'أكتب في ستة عوالم' }}</h2></div></div><div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">@foreach($categories as $category)<a href="{{ route('articles.index',['category'=>$category->slug]) }}" class="card group transition hover:-translate-y-1 hover:border-accent"><div class="mb-7 flex items-center justify-between"><span class="text-xs font-bold uppercase tracking-wider text-accent">{{ $category->name_en }}</span><span class="text-xs text-muted">{{ $category->articles_count }} {{ $isEnglish ? 'articles' : 'مقال' }}</span></div><h3 class="text-2xl font-bold group-hover:text-accent">{{ $category->name() }}</h3><p class="mt-3 leading-7 text-muted">{{ $category->description() }}</p></a>@endforeach</div></section>
-@if($featured)<section class="container-site py-16"><div class="overflow-hidden rounded-[2.5rem] bg-brand text-white">@if($featured->cover_image)<a href="{{ route('articles.show',$featured) }}"><img class="aspect-[16/7] w-full object-cover" src="{{ asset('storage/'.$featured->cover_image) }}" alt="{{ $featured->title() }}"></a>@endif<div class="grid gap-10 p-8 sm:p-12 lg:grid-cols-[.7fr_1.3fr]"><div><span class="rounded-full bg-white/15 px-4 py-2 text-sm">{{ $isEnglish ? 'Featured' : 'اختيار مميز' }}</span><p class="mt-7 text-sm text-white/65">{{ $featured->category->name() }} · {{ $featured->published_at->translatedFormat('j F Y') }}</p></div><div><h2 class="text-3xl leading-snug font-bold sm:text-4xl">{{ $featured->title() }}</h2><p class="mt-4 text-lg leading-8 text-white/75">{{ $featured->excerpt() }}</p><a href="{{ route('articles.show',$featured) }}" class="mt-7 inline-block font-bold">{{ $isEnglish ? 'Read article →' : 'اقرأ المقال ←' }}</a></div></div></div></section>@endif
-<section class="container-site py-16"><div class="mb-8 flex items-end justify-between"><div><p class="font-bold text-brand">{{ $isEnglish ? 'Recently' : 'حديثًا' }}</p><h2 class="mt-2 text-3xl font-bold">{{ $isEnglish ? 'Latest writing' : 'آخر ما كتبت' }}</h2></div><a class="font-bold text-brand" href="{{ route('articles.index') }}">{{ $isEnglish ? 'All articles →' : 'كل المقالات ←' }}</a></div><div class="grid gap-5 md:grid-cols-3">@foreach($articles->take(3) as $article)<article class="card overflow-hidden !p-0">@if($article->cover_image)<a href="{{ route('articles.show',$article) }}"><img class="aspect-video w-full object-cover" src="{{ asset('storage/'.$article->cover_image) }}" alt="{{ $article->title() }}" loading="lazy"></a>@endif<div class="p-6"><span class="text-xs font-bold text-brand">{{ $article->category->name() }}</span><h3 class="mt-4 text-xl leading-relaxed font-bold"><a href="{{ route('articles.show',$article) }}">{{ $article->title() }}</a></h3><p class="mt-3 line-clamp-2 text-sm leading-7 text-ink/55">{{ $article->excerpt() }}</p></div></article>@endforeach</div></section>
-<section id="about" class="container-site py-20"><div class="grid gap-10 border-y border-ink/10 py-16 lg:grid-cols-2"><h2 class="text-4xl leading-snug font-bold">{!! $isEnglish ? 'A place to think clearly,<br>not to perform certainty.' : 'مساحة للتفكير بصوت واضح،<br>لا لاستعراض الإجابات.' !!}</h2><div class="space-y-5 text-lg leading-9 text-ink/65">@if($isEnglish)<p>I document tested lessons and questions I am still exploring. In family topics, I write from the perspective of what I learn and apply; in Islamic topics, I carefully cite sources and clarify the limits of my knowledge.</p><p>The professional profile separately collects technical writing, business case studies, projects, and experience for companies and clients.</p>@else<p>أوثّق هنا الدروس التي اختبرتها، والأسئلة التي ما زلت أبحث فيها. في موضوعات الأسرة أكتب دائمًا بصيغة «ما أتعلمه وأطبقه»، وفي الموضوعات الشرعية أعتني بالمصادر وحدود ما أنسبه لنفسي.</p><p>أما الملف المهني فيجمع المحتوى التقني ودراسات الأعمال والمشاريع في صفحة مستقلة يسهل مشاركتها مع الشركات والعملاء.</p>@endif</div></div></section>
+@push('head')<script type="application/ld+json">{!! json_encode(['@@context' => 'https://schema.org', '@@type' => 'Person', 'name' => 'Kareem Shalaby', 'alternateName' => 'كريم شلبي', 'jobTitle' => 'Software Engineer', 'url' => url('/')], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) !!}</script>@endpush
+<div class="home-page">
+    <section class="home-hero relative isolate overflow-hidden" data-home-hero>
+        <div class="home-orbit home-orbit-one" aria-hidden="true"></div>
+        <div class="home-orbit home-orbit-two" aria-hidden="true"></div>
+        <div class="container-site relative grid min-h-[680px] items-center gap-14 py-20 lg:grid-cols-[1.1fr_.9fr] lg:py-28">
+            <div class="home-intro relative z-10">
+                <span class="home-kicker">{{ $isEnglish ? 'KAREEM SHALABY / PERSONAL SPACE' : 'كريم شلبي / مساحة شخصية' }}</span>
+                <h1 class="home-title mt-8 max-w-3xl font-bold leading-[1.25] tracking-tight">{{ $isEnglish ? 'I try to leave' : 'أحاول أن أترك' }}<br><span>{{ $isEnglish ? 'a mark before I go.' : 'أثرا قبل رحيلي' }}</span></h1>
+                <p class="mt-8 max-w-xl text-lg leading-9 text-muted sm:text-xl">{{ $isEnglish ? 'I am Kareem Shalaby. I build useful things and share what I learn about software, business, and life.' : 'أنا كريم شلبي. أبني ما ينفع، وأشارك ما أتعلمه في البرمجة والأعمال والحياة.' }}</p>
+                <div class="mt-10 flex flex-wrap gap-3">
+                    <a class="btn-primary home-primary" href="{{ route('articles.index') }}">{{ $isEnglish ? 'Explore the articles ↗' : 'استكشف المقالات ↗' }}</a>
+                    <a class="btn-secondary home-secondary" href="{{ route('professional') }}">{{ $isEnglish ? 'Professional profile' : 'الملف المهني' }}</a>
+                </div>
+                <a class="home-scroll-link mt-14 inline-flex items-center gap-3 text-sm font-bold" href="#knowledge"><span class="home-scroll-line" aria-hidden="true"></span>{{ $isEnglish ? 'Scroll to explore' : 'مرر لتكتشف المزيد' }}</a>
+            </div>
+            <div class="home-art relative mx-auto w-full max-w-[500px]" data-home-art aria-hidden="true">
+                <div class="home-art-halo"></div>
+                <div class="home-art-panel">
+                    <span class="home-art-index">01 / {{ $isEnglish ? 'A LIFE IN PROGRESS' : 'رحلة مستمرة' }}</span>
+                    <span class="home-art-monogram">KS<span>.</span></span>
+                    <span class="home-art-rule"></span>
+                    <span class="home-art-caption">{{ $isEnglish ? 'Ideas · Work · Impact' : 'أفكار · عمل · أثر' }}</span>
+                </div>
+                <span class="home-art-stamp">{{ $isEnglish ? 'MADE WITH PURPOSE' : 'بنيةٍ وأثر' }}</span>
+            </div>
+        </div>
+    </section>
+
+    <section id="knowledge" class="container-site py-20 lg:py-28" data-home-reveal>
+        <div class="home-section-heading mb-10 flex flex-wrap items-end justify-between gap-5">
+            <div><span class="home-label">01 / {{ $isEnglish ? 'KNOWLEDGE' : 'المعرفة' }}</span><h2 class="mt-4 text-3xl font-bold sm:text-4xl">{{ $isEnglish ? 'Paths worth exploring' : 'مسارات تستحق الاستكشاف' }}</h2></div>
+            <p class="max-w-md leading-8 text-muted">{{ $isEnglish ? 'Thoughts and lessons from the things I build, read, and experience.' : 'أفكار ودروس من الأشياء التي أبنيها وأقرأ عنها وأعيشها.' }}</p>
+        </div>
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            @foreach($categories as $category)
+                <a href="{{ route('articles.index', ['category' => $category->slug]) }}" class="home-category group" data-home-reveal>
+                    <div class="flex items-start justify-between gap-4"><span class="home-category-number">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span><span class="text-sm text-muted">{{ $category->articles_count }} {{ $isEnglish ? 'articles' : 'مقال' }}</span></div>
+                    <h3 class="mt-12 text-2xl font-bold">{{ $category->name() }}</h3>
+                    <p class="mt-3 line-clamp-2 leading-7 text-muted">{{ $category->description() }}</p>
+                    <span class="mt-8 inline-flex items-center gap-2 font-bold text-accent">{{ $isEnglish ? 'Explore' : 'اكتشف' }} <span aria-hidden="true">↗</span></span>
+                </a>
+            @endforeach
+        </div>
+    </section>
+
+    @if($featured)
+        <section class="container-site py-8 lg:py-16" data-home-reveal>
+            <div class="home-feature grid overflow-hidden rounded-[2rem] lg:grid-cols-2">
+                <div class="flex flex-col justify-center p-8 sm:p-12 lg:p-16">
+                    <span class="home-label !text-[#ff8654]">02 / {{ $isEnglish ? 'EDITOR’S PICK' : 'اختيار مميز' }}</span>
+                    <p class="mt-8 text-sm text-white/60">{{ $featured->category->name() }} · {{ $featured->published_at->translatedFormat('j F Y') }}</p>
+                    <h2 class="mt-5 text-3xl leading-snug font-bold sm:text-4xl">{{ $featured->title() }}</h2>
+                    <p class="mt-5 line-clamp-3 text-lg leading-8 text-white/70">{{ $featured->excerpt() }}</p>
+                    <a href="{{ route('articles.show', $featured) }}" class="mt-9 inline-flex items-center gap-2 font-bold text-[#ff8654]">{{ $isEnglish ? 'Read the article' : 'اقرأ المقال' }} <span aria-hidden="true">↗</span></a>
+                </div>
+                @if($featured->cover_image)
+                    <a href="{{ route('articles.show', $featured) }}" class="block overflow-hidden"><img class="h-full min-h-72 w-full object-cover transition duration-700 hover:scale-105" src="{{ asset('storage/'.$featured->cover_image) }}" alt="{{ $featured->title() }}" loading="lazy"></a>
+                @else
+                    <div class="home-feature-art grid min-h-72 place-items-center font-display text-8xl font-bold" aria-hidden="true">KS<span>.</span></div>
+                @endif
+            </div>
+        </section>
+    @endif
+
+    <section class="container-site py-20 lg:py-28" data-home-reveal>
+        <div class="mb-10 flex flex-wrap items-end justify-between gap-5"><div><span class="home-label">03 / {{ $isEnglish ? 'JOURNAL' : 'المدونة' }}</span><h2 class="mt-4 text-3xl font-bold sm:text-4xl">{{ $isEnglish ? 'Latest writing' : 'آخر ما كتبت' }}</h2></div><a class="home-text-link font-bold" href="{{ route('articles.index') }}">{{ $isEnglish ? 'All articles ↗' : 'كل المقالات ↗' }}</a></div>
+        <div class="grid gap-6 md:grid-cols-3">
+            @foreach($articles->take(3) as $article)
+                <article class="home-article" data-home-reveal>
+                    @if($article->cover_image)<a class="block overflow-hidden rounded-2xl" href="{{ route('articles.show', $article) }}"><img class="aspect-[4/3] w-full object-cover transition duration-700 hover:scale-105" src="{{ asset('storage/'.$article->cover_image) }}" alt="{{ $article->title() }}" loading="lazy"></a>@else<a class="home-article-placeholder grid aspect-[4/3] place-items-center rounded-2xl" href="{{ route('articles.show', $article) }}" aria-label="{{ $article->title() }}">KS.</a>@endif
+                    <div class="mt-6 flex items-center justify-between gap-3 text-sm"><span class="font-bold text-accent">{{ $article->category->name() }}</span><time class="text-muted" datetime="{{ $article->published_at->toDateString() }}">{{ $article->published_at->translatedFormat('j M Y') }}</time></div>
+                    <h3 class="mt-4 text-xl leading-relaxed font-bold"><a href="{{ route('articles.show', $article) }}">{{ $article->title() }}</a></h3>
+                    <p class="mt-3 line-clamp-2 leading-7 text-muted">{{ $article->excerpt() }}</p>
+                </article>
+            @endforeach
+        </div>
+    </section>
+
+    <section class="home-about py-20 lg:py-28" data-home-reveal><div class="container-site grid gap-10 lg:grid-cols-[.8fr_1.2fr]"><div><span class="home-label">04 / {{ $isEnglish ? 'ABOUT' : 'عني' }}</span><h2 class="mt-5 text-3xl leading-snug font-bold sm:text-4xl">{{ $isEnglish ? 'Curiosity, work, and a little more meaning.' : 'فضول وعمل، وقليل من المعنى.' }}</h2></div><div class="space-y-5 text-lg leading-9 text-muted">@if($isEnglish)<p>I document tested lessons and questions I am still exploring. In family topics, I write about what I learn and apply. In Islamic topics, I cite sources and clarify the limits of my knowledge.</p><p>My professional profile brings together technical writing, business case studies, projects, and experience.</p>@else<p>أوثّق هنا الدروس التي اختبرتها، والأسئلة التي ما زلت أبحث فيها. في موضوعات الأسرة أكتب عما أتعلمه وأطبقه، وفي الموضوعات الشرعية أعتني بالمصادر وحدود ما أنسبه لنفسي.</p><p>أما الملف المهني فيجمع المحتوى التقني ودراسات الأعمال والمشاريع والخبرة في صفحة مستقلة.</p>@endif<a class="home-text-link inline-flex pt-3 font-bold" href="{{ route('contact.create') }}">{{ $isEnglish ? 'Get in touch ↗' : 'تواصل معي ↗' }}</a></div></div></section>
+</div>
 </x-layouts.app>
