@@ -3,7 +3,7 @@
 return [
 
     'google' => [
-        'analytics_id' => env('GOOGLE_ANALYTICS_ID'),
+        'analytics_id' => env('GOOGLE_ANALYTICS_ID', 'G-EJV59Q8B88'),
     ],
 
     /*

@@ -9,6 +9,7 @@
 <html lang="{{ app()->getLocale() }}" dir="{{ $isEnglish ? 'ltr' : 'rtl' }}">
 <head>
     <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}?v=1">
     <title>{{ $title ?? ($isEnglish ? 'Kareem Shalaby | Software Engineer' : 'كريم شلبي | Kareem Shalaby') }}</title>
     <meta name="description" content="{{ $description ?? ($isEnglish ? 'Kareem Shalaby — Software Engineer, Entrepreneur, and Writer.' : 'كريم شلبي — مهندس برمجيات، رائد أعمال وكاتب. أكتب عن البرمجة والأعمال وما أتعلمه.') }}">
     <meta name="author" content="Kareem Shalaby"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
