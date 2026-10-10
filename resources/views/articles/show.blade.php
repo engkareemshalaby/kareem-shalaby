@@ -22,6 +22,8 @@
                     <time datetime="{{ $article->published_at->toIso8601String() }}">{{ $article->published_at->translatedFormat('j F Y') }}</time>
                     <span aria-hidden="true">·</span>
                     <span>{{ max(1, ceil(str_word_count(strip_tags($article->body())) / 220)) }} {{ $isEnglish ? 'min read' : 'دقائق قراءة' }}</span>
+                    <span aria-hidden="true">·</span>
+                    <span>{{ number_format($visitsCount) }} {{ $isEnglish ? 'views' : 'زيارة' }}</span>
                 </div>
             </div>
         </div>

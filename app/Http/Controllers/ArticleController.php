@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Models\Category;
 use App\Models\Tag;
+use App\Models\Visit;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -39,8 +40,12 @@ class ArticleController extends Controller
         abort_unless($article->status === 'published' && $article->published_at?->isPast(), 404);
 
         $article->load(['category', 'tags']);
+        $visitsCount = Visit::query()
+            ->where('is_bot', false)
+            ->whereIn('path', ['/ar/articles/'.$article->slug, '/en/articles/'.$article->slug])
+            ->count();
         $related = Article::published()->with(['category', 'tags'])->whereBelongsTo($article->category)->whereKeyNot($article->getKey())->latest('published_at')->limit(3)->get();
 
-        return view('articles.show', compact('article', 'related'));
+        return view('articles.show', compact('article', 'related', 'visitsCount'));
     }
 }

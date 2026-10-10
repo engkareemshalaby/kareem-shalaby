@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Article;
 use App\Models\Tag;
+use App\Models\Visit;
 use Illuminate\Foundation\Testing\LazilyRefreshDatabase;
 use Tests\TestCase;
 
@@ -47,6 +48,23 @@ class PublicSiteTest extends TestCase
         $article = Article::factory()->draft()->create();
 
         $this->get(route('articles.show', $article))->assertNotFound();
+    }
+
+    public function test_article_displays_human_visits_across_both_languages(): void
+    {
+        $article = Article::factory()->create();
+        $otherArticle = Article::factory()->create();
+
+        foreach (['/ar/articles/'.$article->slug, '/en/articles/'.$article->slug] as $path) {
+            Visit::create(['ip_hash' => str_repeat('a', 64), 'path' => $path, 'is_bot' => false]);
+        }
+
+        Visit::create(['ip_hash' => str_repeat('b', 64), 'path' => '/ar/articles/'.$article->slug, 'is_bot' => true]);
+        Visit::create(['ip_hash' => str_repeat('c', 64), 'path' => '/ar/articles/'.$otherArticle->slug, 'is_bot' => false]);
+
+        $this->get(route('articles.show', $article))
+            ->assertOk()
+            ->assertSee('2 زيارة');
     }
 
     public function test_articles_can_be_filtered_by_tag(): void
